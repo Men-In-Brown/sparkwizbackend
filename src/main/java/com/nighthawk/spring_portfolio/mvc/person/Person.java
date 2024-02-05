@@ -164,8 +164,8 @@ public class Person {
         p6.setEmail("jm1021@gmail.com");
         p6.setPassword("123Qwerty!");
         try {
-            Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-11-2001");
-            p5.setDob(d);
+            Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-14-2001");
+            p6.setDob(d);
         } catch (Exception e) {
         }
 
