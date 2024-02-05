@@ -6,6 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.persistence.ManyToOne;
+
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -48,6 +50,8 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
+    @ManyToOne
+    // Functionality
     /*
     DELETE individual Person using ID
      */
