@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserDetailsService implements UserDetailsService {
+public class UserDetailsService implements PersonDetailsService {
 
     @Autowired  // Inject PersonJpaRepository
     private UserJpaRepository userJpaRepository;

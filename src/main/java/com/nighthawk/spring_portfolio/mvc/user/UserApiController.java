@@ -53,7 +53,7 @@ public class UserApiController {
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name) {
         // A person object WITHOUT ID will create a new record with default roles as student
-        User user = new User(username, password, name);
+        User user = new User(username, password, name, null);
         userDetailsService.save(user);
         return new ResponseEntity<>(username +" is created successfully", HttpStatus.CREATED);
     }
@@ -64,7 +64,7 @@ public class UserApiController {
         String term = (String) map.get("term");
 
         // JPA query to filter on term
-        List<User> list = repository.findByNameContainingIgnoreCaseOrUsernameContainingIgnoreCase(term, term);
+        List<User> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
 
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);

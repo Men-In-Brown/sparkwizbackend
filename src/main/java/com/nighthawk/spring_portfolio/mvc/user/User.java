@@ -162,4 +162,9 @@ public class User {
             System.out.println(user);  // print object
         }
     }
+
+    public void setStats(Map<String, Map<String, Object>> date_map) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStats'");
+    }
 }
