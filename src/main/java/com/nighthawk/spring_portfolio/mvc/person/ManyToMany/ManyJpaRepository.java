@@ -1,5 +1,8 @@
-package com.nighthawk.spring_portfolio.mvc.person.ManyToMany;
+package com.nighthawk.spring_portfolio.mvc.many;
 
-public class ManyJpaRepository {
-    
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ManyJpaRepository extends JpaRepository<Many, Long> {
+    // Custom queries can be added here based on your requirements
 }
+
