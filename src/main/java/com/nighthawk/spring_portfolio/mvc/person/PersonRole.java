@@ -26,6 +26,7 @@ public class PersonRole {
         PersonRole student = new PersonRole("ROLE_STUDENT");
         PersonRole teacher = new PersonRole("ROLE_TEACHER");
         PersonRole admin = new PersonRole("ROLE_ADMIN");
+    
         PersonRole[] initArray = {student, teacher, admin};
         return initArray;
     }
