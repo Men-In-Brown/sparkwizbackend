@@ -198,3 +198,15 @@ public class Person {
     }
 
 }
+/*{
+    "id": "19",
+    "date": "2024-02-06",
+    "period1": "stats",
+    "period2": "csa",
+    "period3": "calcab",
+    "period4": "apes",
+    "period5": "offroll"
+    
+  } */ 
+
+  // test data for how to implement this POST (http://localhost:8098/api/person/setStats?)
