@@ -21,9 +21,9 @@ import java.util.function.Function;
 public class BinaryController {
     @GetMapping("/binary")
     public ResponseEntity<?> getBinary() {
-        double[] binary = BinaryGenerate.getBinary();
+        int[] binary = BinaryGenerate.getBinary();
         var response = new Object() {
-            public final double[] numbers = binary;
+            public final int[] numbers = binary;
         };
         return ResponseEntity.ok(response);
     }
