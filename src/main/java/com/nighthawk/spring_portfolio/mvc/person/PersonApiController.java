@@ -6,101 +6,72 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.persistence.ManyToOne;
+
 import java.util.*;
 import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api/person")
 public class PersonApiController {
-    //     @Autowired
-    // private JwtTokenUtil jwtGen;
-    /*
-    #### RESTful API ####
-    Resource: https://spring.io/guides/gs/rest-service/
-    */
 
-    // Autowired enables Control to connect POJO Object through JPA
     @Autowired
     private PersonJpaRepository repository;
 
     @Autowired
     private PersonDetailsService personDetailsService;
 
-    /*
-    GET List of People
-     */
     @GetMapping("/")
     public ResponseEntity<List<Person>> getPeople() {
-        return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
+        return new ResponseEntity<>(repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
-    /*
-    GET individual Person using ID
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Person> getPerson(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+        if (optional.isPresent()) {  
+            Person person = optional.get();  
+            return new ResponseEntity<>(person, HttpStatus.OK);  
         }
-        // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
-    /*
-    DELETE individual Person using ID
-     */
+    @ManyToOne
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
-            repository.deleteById(id);  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+        if (optional.isPresent()) {  
+            Person person = optional.get();  
+            repository.deleteById(id);  
+            return new ResponseEntity<>(person, HttpStatus.OK);  
         }
-        // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
 
-    /*
-    POST Aa record by Requesting Parameters from URI
-     */
     @PostMapping( "/post")
     public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
-                                             @RequestParam("dob") String dobString) {
+                                             @RequestParam("dob") String dobString,
+                                             @RequestParam("stats") String stats
+                                             ) {
         Date dob;
         try {
             dob = new SimpleDateFormat("MM-dd-yyyy").parse(dobString);
         } catch (Exception e) {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
-        // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob);
+        Person person = new Person(email, password, name, dob, stats);
         personDetailsService.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
 
-    /*
-    The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
-     */
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> personSearch(@RequestBody final Map<String,String> map) {
-        // extract term from RequestEntity
         String term = (String) map.get("term");
-
-        // JPA query to filter on term
         List<Person> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
-
-        // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
-    /*
-    The personStats API adds stats by Date to Person table 
-    */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
         // find ID
@@ -129,4 +100,58 @@ public class PersonApiController {
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
+
+    @GetMapping("/compareClassesWithPopulation/{personId}")
+    public ResponseEntity<List<String>> compareClassesWithPopulation(@PathVariable Long personId) {
+        Optional<Person> optionalPerson = repository.findById(personId);
+
+        if (optionalPerson.isPresent()) {
+            Person person = optionalPerson.get();
+            List<Person> allPersons = repository.findAll();
+            List<String> responseMessages = new ArrayList<>();
+
+            for (Person otherPerson : allPersons) {
+                if (!otherPerson.getId().equals(personId)) {
+                    List<String> similarClasses = findSimilarClasses(person, otherPerson);
+                    if (!similarClasses.isEmpty()) {
+                        String message = String.format("User %d has similar classes as User %d such as %s",
+                                                       personId, otherPerson.getId(), similarClasses.toString());
+                        responseMessages.add(message);
+                    }
+                }
+            }
+
+            if (responseMessages.isEmpty()) {
+                return ResponseEntity.ok(Collections.singletonList("No similar classes found with any other user."));
+            } else {
+                return ResponseEntity.ok(responseMessages);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    private List<String> findSimilarClasses(Person person1, Person person2) {
+        Map<String, Map<String, Object>> stats1 = person1.getStats();
+        Map<String, Map<String, Object>> stats2 = person2.getStats();
+
+        List<String> similarClasses = new ArrayList<>();
+
+        for (String date : stats1.keySet()) {
+            if (stats2.containsKey(date)) {
+                Map<String, Object> attributes1 = stats1.get(date);
+                Map<String, Object> attributes2 = stats2.get(date);
+
+                for (String period : attributes1.keySet()) {
+                    if (attributes2.containsKey(period) && attributes1.get(period).equals(attributes2.get(period))) {
+                        similarClasses.add((String) attributes1.get(period));
+                    }
+                }
+            }
+        }
+
+        return similarClasses;
+    }
+
 }
+
