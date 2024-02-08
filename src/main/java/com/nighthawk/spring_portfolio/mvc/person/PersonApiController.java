@@ -100,4 +100,58 @@ public class PersonApiController {
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
+
+    @GetMapping("/compareClassesWithPopulation/{personId}")
+    public ResponseEntity<List<String>> compareClassesWithPopulation(@PathVariable Long personId) {
+        Optional<Person> optionalPerson = repository.findById(personId);
+
+        if (optionalPerson.isPresent()) {
+            Person person = optionalPerson.get();
+            List<Person> allPersons = repository.findAll();
+            List<String> responseMessages = new ArrayList<>();
+
+            for (Person otherPerson : allPersons) {
+                if (!otherPerson.getId().equals(personId)) {
+                    List<String> similarClasses = findSimilarClasses(person, otherPerson);
+                    if (!similarClasses.isEmpty()) {
+                        String message = String.format("User %d has similar classes as User %d such as %s",
+                                                       personId, otherPerson.getId(), similarClasses.toString());
+                        responseMessages.add(message);
+                    }
+                }
+            }
+
+            if (responseMessages.isEmpty()) {
+                return ResponseEntity.ok(Collections.singletonList("No similar classes found with any other user."));
+            } else {
+                return ResponseEntity.ok(responseMessages);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    private List<String> findSimilarClasses(Person person1, Person person2) {
+        Map<String, Map<String, Object>> stats1 = person1.getStats();
+        Map<String, Map<String, Object>> stats2 = person2.getStats();
+
+        List<String> similarClasses = new ArrayList<>();
+
+        for (String date : stats1.keySet()) {
+            if (stats2.containsKey(date)) {
+                Map<String, Object> attributes1 = stats1.get(date);
+                Map<String, Object> attributes2 = stats2.get(date);
+
+                for (String period : attributes1.keySet()) {
+                    if (attributes2.containsKey(period) && attributes1.get(period).equals(attributes2.get(period))) {
+                        similarClasses.add((String) attributes1.get(period));
+                    }
+                }
+            }
+        }
+
+        return similarClasses;
+    }
+
 }
+
