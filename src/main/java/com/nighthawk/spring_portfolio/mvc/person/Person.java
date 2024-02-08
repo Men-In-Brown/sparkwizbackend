@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Convert;
 import static jakarta.persistence.FetchType.EAGER;
 import jakarta.validation.constraints.Email;
@@ -24,6 +27,7 @@ import jakarta.validation.constraints.Size;
 
 import org.codehaus.groovy.util.ListHashMap;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.mapping.Set;
 import org.hibernate.type.SqlTypes;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -89,6 +93,11 @@ public class Person {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String,Map<String, Object>> stats = new HashMap<>(); 
+
+    /* Shaurya - need to add one to many relation between person and chat
+    not working right now
+    @OneToMany(mappedBy = "chat")
+    private java.util.Set<Chat> recordings = new HashSet<>();*/
     
 
     // Constructor used when building object from an API
