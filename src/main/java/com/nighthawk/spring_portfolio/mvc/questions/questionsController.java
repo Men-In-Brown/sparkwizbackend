@@ -192,10 +192,10 @@ public class questionsController {
     
 
     // New endpoint for boolean questions
-    @GetMapping("/boolean")
-    public ResponseEntity<?> getBooleanQuestions() {
+    @GetMapping("/api/boolean")
+    public ResponseEntity<?> getBooleanMCQs() {
         var response = new Object() {
-            public final String[] questions = booleanQuestionsMCQ;
+            public final String[][] mcqs = booleanQuestionsMCQ;
         };
         return ResponseEntity.ok(response);
     }
