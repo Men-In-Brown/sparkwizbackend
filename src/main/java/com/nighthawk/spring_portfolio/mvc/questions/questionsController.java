@@ -117,8 +117,6 @@ public class questionsController {
             "D) Error",
             "Answer: B) False"
         },
-        // More questions can be added here following the same format...
-    
         {
             "What does 'bool(False)' evaluate to in Python?",
             "A) True",
@@ -129,70 +127,180 @@ public class questionsController {
         }
     };
     
-    // Note: For brevity, only 5 questions are shown here. You should expand this array to include all your questions.
+    String[][] sassQuestionsMCQ = {
+        {
+            "What is SASS and what does it stand for?",
+            "A) Style And Syntax Sheet",
+            "B) Syntactically Awesome Style Sheets",
+            "C) Simple And Secure Styles",
+            "D) Systematic Advanced Style Syntax",
+            "Answer: B) Syntactically Awesome Style Sheets"
+        },
+        {
+            "How do you declare a variable in SASS?",
+            "A) var variableName: value;",
+            "B) $variableName: value;",
+            "C) @variableName: value;",
+            "D) variableName = value;",
+            "Answer: B) $variableName: value;"
+        },
+        {
+            "What is the difference between SASS and SCSS?",
+            "A) SCSS allows CSS syntax, SASS does not",
+            "B) SASS is a newer version",
+            "C) SCSS is more powerful",
+            "D) No difference, just naming conventions",
+            "Answer: A) SCSS allows CSS syntax, SASS does not"
+        },
+        {
+            "How can you create a mixin in SASS?",
+            "A) @mixin mixinName { ... }",
+            "B) @function mixinName { ... }",
+            "C) @include mixinName { ... }",
+            "D) mixin mixinName { ... }",
+            "Answer: A) @mixin mixinName { ... }"
+        },
+        {
+            "What is the purpose of the @import directive in SASS?",
+            "A) To import mixins",
+            "B) To include CSS files",
+            "C) To load SASS/SCSS files",
+            "D) To import JavaScript files",
+            "Answer: C) To load SASS/SCSS files"
+        },
+        {
+            "How do you use nested rules in SASS?",
+            "A) By using the @nest directive",
+            "B) By placing selectors inside other selectors",
+            "C) By separating selectors with a comma",
+            "D) By using the & symbol",
+            "Answer: B) By placing selectors inside other selectors"
+        },
+        {
+            "What are partials in SASS and how do you use them?",
+            "A) Variables that are partially used",
+            "B) Incomplete CSS rules",
+            "C) Small SASS files that can be included in other SASS files",
+            "D) A method to partially import a file",
+            "Answer: C) Small SASS files that can be included in other SASS files"
+        },
+        {
+            "Explain the concept of inheritance in SASS with the @extend directive.",
+            "A) Allowing one selector to inherit the styles of another",
+            "B) Extending SASS with JavaScript",
+            "C) Increasing the specificity of a selector",
+            "D) Copying styles from one file to another",
+            "Answer: A) Allowing one selector to inherit the styles of another"
+        },
+        {
+            "How can you perform mathematical operations in SASS?",
+            "A) Using JavaScript",
+            "B) With special SASS math functions",
+            "C) Directly in the CSS",
+            "D) By using CSS variables",
+            "Answer: B) With special SASS math functions"
+        },
+        {
+            "What is the purpose of the @if directive in SASS?",
+            "A) To check the type of a variable",
+            "B) To import files conditionally",
+            "C) To apply styles based on conditions",
+            "D) To define SASS functions",
+            "Answer: C) To apply styles based on conditions"
+        }
+    };
     
     
-    String[] sassQuestions = {
-        "What is SASS and what does it stand for?",
-        "How do you declare a variable in SASS?",
-        "What is the difference between SASS and SCSS?",
-        "How can you create a mixin in SASS?",
-        "What is the purpose of the @import directive in SASS?",
-        "How do you use nested rules in SASS?",
-        "What are partials in SASS and how do you use them?",
-        "Explain the concept of inheritance in SASS with the @extend directive.",
-        "How can you perform mathematical operations in SASS?",
-        "What is the purpose of the @if directive in SASS?",
-        "How do you implement loops in SASS?",
-        "What are SASS functions and how do you define one?",
-        "Explain the use of the @each directive in SASS.",
-        "How can you manage colors in SASS using functions like lighten() and darken()?",
-        "What is the role of the @use rule in SASS?",
-        "How does SASS improve CSS maintainability?",
-        "What is the difference between @use and @import in SASS?",
-        "How can you create a grid layout using SASS mixins?",
-        "What are the advantages of using SASS maps?",
-        "How can you handle browser compatibility using SASS?",
-        "What are the best practices for organizing SASS files in a large project?",
-        "How do you comment in SASS and what types of comments are there?",
-        "What is the significance of the !default flag in variable declarations?",
-        "How can you use SASS in a React project?",
-        "What tools are available for compiling SASS into CSS?",
-        "Explain the concept of modules in SASS.",
-        "How can SASS help in creating responsive designs?",
-        "What is the difference between nested and root-level media queries in SASS?",
-        "How do you handle errors and warnings in SASS?",
-        "What are some popular frameworks or libraries that use SASS?"
+    
+    String[][] flaskSetupQuestionsMCQ = {
+        {
+            "How do you install Flask in a Python environment?",
+            "A) npm install flask",
+            "B) pip install flask",
+            "C) docker pull flask",
+            "D) brew install flask",
+            "Answer: B) pip install flask"
+        },
+        {
+            "What is the command to create a new Flask application?",
+            "A) flask startapp",
+            "B) flask new app",
+            "C) flask create app",
+            "D) flask run",
+            "Answer: D) flask run"
+        },
+        {
+            "How do you define a route in a Flask application?",
+            "A) @app.route('/route')",
+            "B) @flask.route('/route')",
+            "C) @route('/route')",
+            "D) @app.get('/route')",
+            "Answer: A) @app.route('/route')"
+        },
+        {
+            "What is the purpose of the app.run() method in Flask?",
+            "A) To define route functions",
+            "B) To start the Flask application",
+            "C) To install Flask dependencies",
+            "D) To configure the application",
+            "Answer: B) To start the Flask application"
+        },
+        {
+            "How can you enable debug mode in a Flask application?",
+            "A) app.debug = True",
+            "B) app.config['DEBUG'] = True",
+            "C) FLASK_DEBUG = 1",
+            "D) Both A and B",
+            "Answer: D) Both A and B"
+        },
+        {
+            "What is a view function in Flask and how do you create one?",
+            "A) A function that returns Flask views, created with @view('/path')",
+            "B) A function that returns HTML templates, created with @template('/path')",
+            "C) A function that handles a route, created with @app.route('/path')",
+            "D) A function that processes form data, created with @app.form('/path')",
+            "Answer: C) A function that handles a route, created with @app.route('/path')"
+        },
+        {
+            "How do you retrieve query parameters in Flask from a URL?",
+            "A) request.query['parameter']",
+            "B) request.args.get('parameter')",
+            "C) request.get('parameter')",
+            "D) request.params['parameter']",
+            "Answer: B) request.args.get('parameter')"
+        },
+        {
+            "What is the Jinja2 template engine and how is it used in Flask?",
+            "A) A CSS framework for Flask",
+            "B) A JavaScript engine for Flask applications",
+            "C) A template engine for rendering HTML templates",
+            "D) A database engine for Flask",
+            "Answer: C) A template engine for rendering HTML templates"
+        },
+        {
+            "How do you render a template file in a Flask view function?",
+            "A) render_template('template.html')",
+            "B) flask.render('template.html')",
+            "C) app.render('template.html')",
+            "D) template.render('template.html')",
+            "Answer: A) render_template('template.html')"
+        },
+        {
+            "What is the Flask-WTF extension and how do you use it to handle forms?",
+            "A) A Flask extension for creating and managing forms",
+            "B) A Flask tool for debugging",
+            "C) A Flask extension for Windows Task Force",
+            "D) A Flask widget toolkit",
+            "Answer: A) A Flask extension for creating and managing forms"
+        }
     };
-
-    String[] flaskSetupQuestions = {
-        "How do you install Flask in a Python environment?",
-        "What is the command to create a new Flask application?",
-        "How do you define a route in a Flask application?",
-        "What is the purpose of the app.run() method in Flask?",
-        "How can you enable debug mode in a Flask application?",
-        "What is a view function in Flask and how do you create one?",
-        "How do you retrieve query parameters in Flask from a URL?",
-        "What is the Jinja2 template engine and how is it used in Flask?",
-        "How do you render a template file in a Flask view function?",
-        "What is the Flask-WTF extension and how do you use it to handle forms?",
-        "How can you protect your Flask application against CSRF attacks?",
-        "How do you connect a Flask application to a SQL database?",
-        "What is Flask-SQLAlchemy and how does it simplify database operations?",
-        "How do you create a database model in Flask?",
-        "What is a Flask Blueprint and how do you use it to modularize your application?",
-        "How can you manage user sessions in Flask?",
-        "What are Flask extensions and can you name a few commonly used ones?",
-        "How do you handle file uploads in a Flask application?",
-        "What are some strategies for structuring a large Flask application?",
-        "How do you deploy a Flask application to a production server like Heroku or AWS?"
-    };
+    
     
     
     
 
     // New endpoint for boolean questions
-    @GetMapping("/api/boolean")
+    @GetMapping("/boolean")
     public ResponseEntity<?> getBooleanMCQs() {
         var response = new Object() {
             public final String[][] mcqs = booleanQuestionsMCQ;
@@ -204,7 +312,7 @@ public class questionsController {
     @GetMapping("/sass")
     public ResponseEntity<?> getSassQuestions() {
         var response = new Object() {
-            public final String[] questions = sassQuestions;
+            public final String[][] mcqs = sassQuestionsMCQ;
         };
         return ResponseEntity.ok(response);
     }
@@ -213,7 +321,7 @@ public class questionsController {
     @GetMapping("/flask")
     public ResponseEntity<?> getFkasjQuestions() {
         var response = new Object() {
-            public final String[] questions = flaskSetupQuestions;
+            public final String[][] mcqs = flaskSetupQuestionsMCQ;
         };
         return ResponseEntity.ok(response);
     }
