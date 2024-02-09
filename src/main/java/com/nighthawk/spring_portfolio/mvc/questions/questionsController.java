@@ -97,6 +97,28 @@ public class questionsController {
         "What are some popular frameworks or libraries that use SASS?"
     };
 
+    String[] flaskSetupQuestions = {
+        "How do you install Flask in a Python environment?",
+        "What is the command to create a new Flask application?",
+        "How do you define a route in a Flask application?",
+        "What is the purpose of the app.run() method in Flask?",
+        "How can you enable debug mode in a Flask application?",
+        "What is a view function in Flask and how do you create one?",
+        "How do you retrieve query parameters in Flask from a URL?",
+        "What is the Jinja2 template engine and how is it used in Flask?",
+        "How do you render a template file in a Flask view function?",
+        "What is the Flask-WTF extension and how do you use it to handle forms?",
+        "How can you protect your Flask application against CSRF attacks?",
+        "How do you connect a Flask application to a SQL database?",
+        "What is Flask-SQLAlchemy and how does it simplify database operations?",
+        "How do you create a database model in Flask?",
+        "What is a Flask Blueprint and how do you use it to modularize your application?",
+        "How can you manage user sessions in Flask?",
+        "What are Flask extensions and can you name a few commonly used ones?",
+        "How do you handle file uploads in a Flask application?",
+        "What are some strategies for structuring a large Flask application?",
+        "How do you deploy a Flask application to a production server like Heroku or AWS?"
+    };
     
     
     
@@ -110,12 +132,21 @@ public class questionsController {
         return ResponseEntity.ok(response);
     }
 
-        // New endpoint for sass questions
-        @GetMapping("/sass")
-        public ResponseEntity<?> getSassQuestions() {
-            var response = new Object() {
-                public final String[] questions = sassQuestions;
-            };
-            return ResponseEntity.ok(response);
-        }
+    // New endpoint for sass questions
+    @GetMapping("/sass")
+    public ResponseEntity<?> getSassQuestions() {
+        var response = new Object() {
+            public final String[] questions = sassQuestions;
+        };
+        return ResponseEntity.ok(response);
+    }
+
+    // New endpoint for sass questions
+    @GetMapping("/flask")
+    public ResponseEntity<?> getFkasjQuestions() {
+        var response = new Object() {
+            public final String[] questions = flaskSetupQuestions;
+        };
+        return ResponseEntity.ok(response);
+    }
 }
