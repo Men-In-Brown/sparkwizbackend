@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +18,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Convert;
 import static jakarta.persistence.FetchType.EAGER;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import org.codehaus.groovy.util.ListHashMap;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.mapping.Set;
 import org.hibernate.type.SqlTypes;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -77,22 +82,32 @@ public class Person {
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
         "2022-11-13": {
-            "calories": 2200,
-            "steps": 8000
+            "class 1": csa,
+            "class 2": csp,
+            "class 3": csse,
+            "class 4": calcab,
+            "class 5": phys
         }
     }
     */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String,Map<String, Object>> stats = new HashMap<>(); 
+
+    /* Shaurya - need to add one to many relation between person and chat
+    not working right now
+    @OneToMany(mappedBy = "chat")
+    private java.util.Set<Chat> recordings = new HashSet<>();*/
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob) {
+    public Person(String email, String password, String name, Date dob, String stats) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
+        this.stats = new HashMap<>();
+       
     }
 
     // A custom getter to return age from dob attribute
@@ -111,6 +126,7 @@ public class Person {
         p1.setName("Thomas Edison");
         p1.setEmail("toby@gmail.com");
         p1.setPassword("123Toby!");
+
         // adding Note to notes collection
         try {  // All data that converts formats could fail
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1840");
@@ -119,35 +135,16 @@ public class Person {
             // no actions as dob default is good enough
         }
 
-        Person p2 = new Person();
-        p2.setName("Alexander Graham Bell");
-        p2.setEmail("lexb@gmail.com");
-        p2.setPassword("123LexB!");
-        try {
-            Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1845");
-            p2.setDob(d);
-        } catch (Exception e) {
-        }
-
-        Person p3 = new Person();
-        p3.setName("Nikola Tesla");
-        p3.setEmail("niko@gmail.com");
-        p3.setPassword("123Niko!");
-        try {
-            Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1850");
-            p3.setDob(d);
-        } catch (Exception e) {
-        }
-
-        Person p4 = new Person();
-        p4.setName("Madam Currie");
-        p4.setEmail("madam@gmail.com");
-        p4.setPassword("123Madam!");
-        try {
-            Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1860");
-            p4.setDob(d);
-        } catch (Exception e) {
-        }
+         // Adding stats data
+        Map<String, Object> stats1 = new HashMap<>();
+        stats1.put("class 1", "csa");
+        stats1.put("class 2", "csp");
+        stats1.put("class 3", "csse");
+        stats1.put("class 4", "calcab");
+        stats1.put("class 5", "phys");
+        p1.getStats().put("01-01-1840", stats1);
+        String dobKey1 = new SimpleDateFormat("MM-dd-yyyy").format(p1.getDob());
+        p1.getStats().put(dobKey1, stats1);
 
         Person p5 = new Person();
         p5.setName("Spark Admin");
@@ -158,6 +155,19 @@ public class Person {
             p5.setDob(d);
         } catch (Exception e) {
         }
+           // Adding stats data
+           Map<String, Object> stats5 = new HashMap<>();
+           stats5.put("class 1", "csa");
+           stats5.put("class 2", "csp");
+           stats5.put("class 3", "csse");
+           stats5.put("class 4", "calcab");
+           stats5.put("class 5", "phys");
+           p5.getStats().put("09-11-2001", stats5);
+           String dobKey5 = new SimpleDateFormat("MM-dd-yyyy").format(p5.getDob());
+           p5.getStats().put(dobKey5, stats1);
+   
+
+        
 
         Person p6 = new Person();
         p6.setName("John Mortensen");
@@ -169,8 +179,20 @@ public class Person {
         } catch (Exception e) {
         }
 
+           // Adding stats data
+           Map<String, Object> stats6 = new HashMap<>();
+           stats6.put("class 1", "csa");
+           stats6.put("class 2", "csp");
+           stats6.put("class 3", "csse");
+           stats6.put("class 4", "calcab");
+           stats6.put("class 5", "phys");
+           p6.getStats().put("09-14-2001", stats6);
+           String dobKey6 = new SimpleDateFormat("MM-dd-yyyy").format(p6.getDob());
+           p6.getStats().put(dobKey6, stats1);
+   
+
         // Array definition and data initialization
-        Person persons[] = {p1, p2, p3, p4, p5, p6};
+        Person persons[] = {p1,p5, p6};
         return(persons);
     }
 
@@ -185,3 +207,15 @@ public class Person {
     }
 
 }
+/*{
+    "id": "19",
+    "date": "2024-02-06",
+    "period1": "stats",
+    "period2": "csa",
+    "period3": "calcab",
+    "period4": "apes",
+    "period5": "offroll"
+    
+  } */ 
+
+  // test data for how to implement this POST (http://localhost:8098/api/person/setStats?)
