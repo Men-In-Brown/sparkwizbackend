@@ -1,24 +1,22 @@
-// package com.nighthawk.spring_portfolio.mvc.test;
+package com.nighthawk.spring_portfolio.mvc.test;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-// import java.util.List;
+import java.util.List;
 
-// public class DataTestJpaRepository {
-    
-// public interface DataTestJpaRepository extends JpaRepository<Test, Long> {
-//     Test findByEmail(String state);
+// Rename the class to avoid name conflict
+public interface DataTestJpaRepository extends JpaRepository<DataTest, Long> {
+    DataTest findByEmail(String state);
 
-//     List<Test> findAllByOrderByNameAsc();
+    List<DataTest> findAllByOrderByNameAsc();
 
-//     List<Test> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
+    List<DataTest> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
 
-//     Test findByEmailAndPassword(String state, String password);
+    DataTest findByEmailAndPassword(String state, String password);
 
-//     @Query(
-//             value = "SELECT * FROM Test p WHERE p.name LIKE ?1 or p.email LIKE ?1",
-//             nativeQuery = true)
-//     List<Test> findByLikeTermNative(String term);
-//     }
-// }
+    @Query(
+            value = "SELECT * FROM DataTest p WHERE p.name LIKE ?1 or p.email LIKE ?1",
+            nativeQuery = true)
+    List<DataTest> findByLikeTermNative(String term);
+}
