@@ -40,51 +40,42 @@ import lombok.NonNull;
 @Convert(attributeName ="test", converter = JsonType.class)
 public class DataTest {
 
-    // automatic unique identifier for Person record
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // email, password, roles are key attributes to login and authentication
+    // state, password, roles are key attributes to login and authentication
     @NotEmpty
     @Size(min=5)
     @Column(unique=true)
-    @Email
-    private String email;
+    @State
+    private String state;
 
     @NotEmpty
     private String password;
 
-    // @NonNull, etc placed in params of constructor: "@NonNull @Size(min = 2, max = 30, message = "Name (2 to 30 chars)") String name"
+    // @NonNull, etc placed in params of constructor: "@NonNull @Size(min = 2, max = 30, message = "Game (2 to 30 chars)") String game"
     @NonNull
-    @Size(min = 2, max = 30, message = "Name (2 to 30 chars)")
-    private String name;
+    @Size(min = 2, max = 30, message = "Game (2 to 30 chars)")
+    private String game;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
     // To be implemented
     @ManyToMany(fetch = EAGER)
-    private Collection<PersonRole> roles = new ArrayList<>();
+    private Collection<TestRole> roles = new ArrayList<>();
 
-    /* HashMap is used to store JSON for daily "stats"
-    "stats": {
-        "2022-11-13": {
-            "calories": 2200,
-            "steps": 8000
-        }
-    }
-    */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String,Map<String, Object>> stats = new HashMap<>(); 
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob) {
-        this.email = email;
+    public Test(String state, String password, String name, Date dob) {
+        this.state = state;
         this.password = password;
-        this.name = name;
+        this.game = game;
         this.dob = dob;
     }
 
@@ -97,12 +88,12 @@ public class DataTest {
     }
 
     // Initialize static test data 
-    public static Person[] init() {
+    public static Test[] init() {
 
         // basics of class construction
-        Person p1 = new Person();
-        p1.setName("Thomas Edison");
-        p1.setEmail("toby@gmail.com");
+        Test p1 = new Test();
+        p1.setGame("Thomas Edison");
+        p1.setState("Running");
         p1.setPassword("123Toby!");
         // adding Note to notes collection
         try {  // All data that converts formats could fail
@@ -112,9 +103,9 @@ public class DataTest {
             // no actions as dob default is good enough
         }
 
-        Person p2 = new Person();
-        p2.setName("Alexander Graham Bell");
-        p2.setEmail("lexb@gmail.com");
+        Test p2 = new Test();
+        p2.setGame("Alexander Graham Bell");
+        p2.setState("Running");
         p2.setPassword("123LexB!");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1845");
@@ -122,9 +113,9 @@ public class DataTest {
         } catch (Exception e) {
         }
 
-        Person p3 = new Person();
-        p3.setName("Nikola Tesla");
-        p3.setEmail("niko@gmail.com");
+        Test p3 = new Test();
+        p3.setGame("Nikola Tesla");
+        p3.setState("niko@gmail.com");
         p3.setPassword("123Niko!");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1850");
@@ -132,9 +123,9 @@ public class DataTest {
         } catch (Exception e) {
         }
 
-        Person p4 = new Person();
-        p4.setName("Madam Currie");
-        p4.setEmail("madam@gmail.com");
+        Test p4 = new Test();
+        p4.setGame("Madam Currie");
+        p4.setState("madam@gmail.com");
         p4.setPassword("123Madam!");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1860");
@@ -142,9 +133,9 @@ public class DataTest {
         } catch (Exception e) {
         }
 
-        Person p5 = new Person();
-        p5.setName("Spark Admin");
-        p5.setEmail("spk@gmail.com");
+        Test p5 = new Test();
+        p5.setGame("Spark Admin");
+        p5.setRunning("spk@gmail.com");
         p5.setPassword("spark");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-11-2001");
@@ -152,9 +143,9 @@ public class DataTest {
         } catch (Exception e) {
         }
 
-        Person p6 = new Person();
-        p6.setName("John Mortensen");
-        p6.setEmail("jm1021@gmail.com");
+        Test p6 = new Test();
+        p6.setGame("John Mortensen");
+        p6.setState("Running");
         p6.setPassword("123Qwerty!");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-14-2001");
@@ -163,17 +154,17 @@ public class DataTest {
         }
 
         // Array definition and data initialization
-        Person persons[] = {p1, p2, p3, p4, p5, p6};
-        return(persons);
+        Test tests[] = {p1, p2, p3, p4, p5, p6};
+        return(tests);
     }
 
     public static void main(String[] args) {
-        // obtain Person from initializer
-        Person persons[] = init();
+        // obtain Test from initializer
+        Test tests[] = init();
 
         // iterate using "enhanced for loop"
-        for( Person person : persons) {
-            System.out.println(person);  // print object
+        for( Test test : tests) {
+            System.out.println(test);  // print object
         }
     }
 

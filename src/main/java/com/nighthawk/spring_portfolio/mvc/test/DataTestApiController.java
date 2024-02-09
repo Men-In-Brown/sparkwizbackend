@@ -12,65 +12,54 @@ import java.text.SimpleDateFormat;
 @RestController
 @RequestMapping("/api/test")
 public class DataTestApiController {
-    
-    //     @Autowired
-    // private JwtTokenUtil jwtGen;
-    /*
-    #### RESTful API ####
-    Resource: https://spring.io/guides/gs/rest-service/
-    */
-
-    // Autowired enables Control to connect POJO Object through JPA
-    @Autowired
-    private PersonJpaRepository repository;
 
     @Autowired
-    private PersonDetailsService personDetailsService;
+    private DataTestJpaRepository repository;
+
+    @Autowired
+    private DataTestDetailsService testDetailsService;
 
     /*
     GET List of People
      */
     @GetMapping("/")
-    public ResponseEntity<List<Person>> getPeople() {
+    public ResponseEntity<List<Test>> getPeople() {
         return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
     /*
-    GET individual Person using ID
+    GET individual Test using ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getPerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<Test> getTest(@PathVariable long id) {
+        Optional<Test> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            Test test = optional.get();  // value from findByID
+            return new ResponseEntity<>(test, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
     /*
-    DELETE individual Person using ID
+    DELETE individual Test using ID
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Person> deletePerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<Test> deleteTest(@PathVariable long id) {
+        Optional<Test> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Test test = optional.get();  // value from findByID
             repository.deleteById(id);  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            return new ResponseEntity<>(test, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
 
-    /*
-    POST Aa record by Requesting Parameters from URI
-     */
     @PostMapping( "/post")
-    public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
+    public ResponseEntity<Object> postTest(@RequestParam("state") String state,
                                              @RequestParam("password") String password,
-                                             @RequestParam("name") String name,
+                                             @RequestParam("game") String game,
                                              @RequestParam("dob") String dobString) {
         Date dob;
         try {
@@ -78,37 +67,37 @@ public class DataTestApiController {
         } catch (Exception e) {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
-        // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob);
-        personDetailsService.save(person);
-        return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
+        // A test object WITHOUT ID will create a new record with default roles as student
+        Test test = new Test(state, password, game, dob);
+        testDetailsService.save(test);
+        return new ResponseEntity<>(state +" is created successfully", HttpStatus.CREATED);
     }
 
     /*
-    The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
+    The testSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
      */
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> personSearch(@RequestBody final Map<String,String> map) {
+    public ResponseEntity<Object> testSearch(@RequestBody final Map<String,String> map) {
         // extract term from RequestEntity
         String term = (String) map.get("term");
 
         // JPA query to filter on term
-        List<Person> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+        List<Test> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
 
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /*
-    The personStats API adds stats by Date to Person table 
+    The testStats API adds stats by Date to Test table 
     */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+    public ResponseEntity<Test> testStats(@RequestBody final Map<String,Object> stat_map) {
         // find ID
         long id=Long.parseLong((String)stat_map.get("id"));  
-        Optional<Person> optional = repository.findById((id));
+        Optional<Test> optional = repository.findById((id));
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Test test = optional.get();  // value from findByID
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
@@ -121,11 +110,11 @@ public class DataTestApiController {
             // Set Date and Attributes to SQL HashMap
             Map<String, Map<String, Object>> date_map = new HashMap<>();
             date_map.put( (String) stat_map.get("date"), attributeMap );
-            person.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
-            repository.save(person);  // conclude by writing the stats updates
+            test.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
+            repository.save(test);  // conclude by writing the stats updates
 
-            // return Person with update Stats
-            return new ResponseEntity<>(person, HttpStatus.OK);
+            // return Test with update Stats
+            return new ResponseEntity<>(test, HttpStatus.OK);
         }
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
