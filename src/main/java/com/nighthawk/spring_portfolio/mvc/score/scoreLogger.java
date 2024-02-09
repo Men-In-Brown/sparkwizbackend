@@ -57,6 +57,7 @@ public class scoreLogger {
             return ResponseEntity.internalServerError().body("Error retrieving leaderboard: " + e.getMessage());
         }
     }
+    
 
     private void saveScore(GameScore gameScore) throws IOException {
         String fileName = gameScore.getGametype().toLowerCase() + "Scores.json";
