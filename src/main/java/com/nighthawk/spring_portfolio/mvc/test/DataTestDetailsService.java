@@ -15,11 +15,11 @@
 // @Service
 // @Transactional
 // public class DataTestDetailsService implements UserDetailsService {  // "implements" ties ModelRepo to Spring Security
-//     // Encapsulate many object into a single Bean (Person, Roles, and Scrum)
-//     @Autowired  // Inject PersonJpaRepository
+//     // Encapsulate many object into a single Bean (DataTest, Roles, and Scrum)
+//     @Autowired  // Inject DataTestJpaRepository
 //     private DataTestJpaRepository datatestJpaRepository;
 //     @Autowired  // Inject RoleJpaRepository
-//     private PersonRoleJpaRepository personRoleJpaRepository;
+//     private DataTestRoleJpaRepository personRoleJpaRepository;
 //     // @Autowired  // Inject PasswordEncoder
 //     PasswordEncoder passwordEncoder(){
 //         return new BCryptPasswordEncoder();
@@ -48,12 +48,12 @@
 
 //     // custom query to find match to name or email
 //     public  List<Person>list(String name, String email) {
-//         return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(name, email);
+//         return personJpaRepository.findByNameContainingIgnoreCaseOrStateContainingIgnoreCase(name, email);
 //     }
 
 //     // custom query to find anything containing term in name or email ignoring case
 //     public  List<Person>listLike(String term) {
-//         return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+//         return personJpaRepository.findByNameContainingIgnoreCaseOrStateContainingIgnoreCase(term, term);
 //     }
 
 //     // custom query to find anything containing term in name or email ignoring case
