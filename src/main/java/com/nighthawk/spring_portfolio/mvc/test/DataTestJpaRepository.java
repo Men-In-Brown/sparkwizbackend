@@ -11,7 +11,7 @@ public interface DataTestJpaRepository extends JpaRepository<DataTest, Long> {
 
     List<DataTest> findAllByOrderByNameAsc();
 
-    List<DataTest> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
+    List<DataTest> findByNameContainingIgnoreCaseOrStateContainingIgnoreCase(String name, String email);
 
     DataTest findByEmailAndPassword(String state, String password);
 

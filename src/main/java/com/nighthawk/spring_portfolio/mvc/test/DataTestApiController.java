@@ -11,53 +11,46 @@ import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api/test")
-public class DataTestApiController.java {
-    //     @Autowired
-    // private JwtTokenUtil jwtGen;
-    /*
-    #### RESTful API ####
-    Resource: https://spring.io/guides/gs/rest-service/
-    */
-
-    // Autowired enables Control to connect POJO Object through JPA
-    @Autowired
-    private PersonJpaRepository repository;
+public class DataTestApiController {
 
     @Autowired
-    private PersonDetailsService personDetailsService;
+    private DataTestJpaRepository repository;
+
+    // @Autowired
+    // private PersonDetailsService personDetailsService;
 
     /*
     GET List of People
      */
     @GetMapping("/")
-    public ResponseEntity<List<Person>> getPeople() {
+    public ResponseEntity<List<DataTest>> getPeople() {
         return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
     /*
-    GET individual Person using ID
+    GET individual DataTest using ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getPerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<DataTest> getDataTest(@PathVariable long id) {
+        Optional<DataTest> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            DataTest dataTest = optional.get();  // value from findByID
+            return new ResponseEntity<>(dataTest, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
     /*
-    DELETE individual Person using ID
+    DELETE individual DataTest using ID
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Person> deletePerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<DataTest> deleteDataTest(@PathVariable long id) {
+        Optional<DataTest> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            DataTest dataTest = optional.get();  // value from findByID
             repository.deleteById(id);  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            return new ResponseEntity<>(dataTest, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
@@ -67,7 +60,7 @@ public class DataTestApiController.java {
     POST Aa record by Requesting Parameters from URI
      */
     @PostMapping( "/post")
-    public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
+    public ResponseEntity<Object> postDataTest(@RequestParam("state") String state,
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
                                              @RequestParam("dob") String dobString) {
@@ -77,37 +70,31 @@ public class DataTestApiController.java {
         } catch (Exception e) {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
-        // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob, personDetailsService.findRole("USER"));
-        personDetailsService.save(person);
-        return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
+        // A dataTest object WITHOUT ID will create a new record with default roles as student
+        DataTest dataTest = new DataTest(state, password, name, dob /*personDetailsService.findRole("USER")*/);
+        // dataTestDetailsService.save(dataTest);
+        return new ResponseEntity<>(state +" is created successfully", HttpStatus.CREATED);
     }
 
-    /*
-    The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
-     */
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> personSearch(@RequestBody final Map<String,String> map) {
-        // extract term from RequestEntity
+    public ResponseEntity<Object> dataTestSearch(@RequestBody final Map<String,String> map) {
         String term = (String) map.get("term");
 
-        // JPA query to filter on term
-        List<Person> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+        List<DataTest> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
 
-        // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /*
-    The personStats API adds stats by Date to Person table 
+    The dataTest stats API adds stats by Date to DataTest table 
     */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+    public ResponseEntity<DataTest> personStats(@RequestBody final Map<String,Object> stat_map) {
         // find ID
         long id=Long.parseLong((String)stat_map.get("id"));  
-        Optional<Person> optional = repository.findById((id));
+        Optional<DataTest> optional = repository.findById((id));
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            DataTest dataTest = optional.get();  // value from findByID
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
@@ -120,11 +107,11 @@ public class DataTestApiController.java {
             // Set Date and Attributes to SQL HashMap
             Map<String, Map<String, Object>> date_map = new HashMap<>();
             date_map.put( (String) stat_map.get("date"), attributeMap );
-            person.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
-            repository.save(person);  // conclude by writing the stats updates
+            dataTest.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
+            repository.save(data);  // conclude by writing the stats updates
 
-            // return Person with update Stats
-            return new ResponseEntity<>(person, HttpStatus.OK);
+            // return DataTest with update Stats
+            return new ResponseEntity<>(dataTest, HttpStatus.OK);
         }
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
