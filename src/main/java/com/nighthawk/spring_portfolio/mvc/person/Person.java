@@ -67,7 +67,7 @@ public class Person {
     @NotEmpty
     private String password;
 
-    @NotEmpty
+    @NonNull
     private Integer grade;
 
     // @NonNull, etc placed in params of constructor: "@NonNull @Size(min = 2, max = 30, message = "Name (2 to 30 chars)") String name"
@@ -130,7 +130,7 @@ public class Person {
         p1.setName("Thomas Edison");
         p1.setEmail("toby@gmail.com");
         p1.setPassword("123Toby!");
-        p1.setGrade(12);
+        p1.setGrade(11);
 
         // adding Note to notes collection
         try {  // All data that converts formats could fail
