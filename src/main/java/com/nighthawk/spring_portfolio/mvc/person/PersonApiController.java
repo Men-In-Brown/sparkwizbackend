@@ -53,7 +53,8 @@ public class PersonApiController {
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
                                              @RequestParam("dob") String dobString,
-                                             @RequestParam("stats") String stats
+                                             @RequestParam("stats") String stats,
+                                             @RequestParam("grade") int grade
                                              ) {
         Date dob;
         try {
@@ -61,7 +62,7 @@ public class PersonApiController {
         } catch (Exception e) {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
-        Person person = new Person(email, password, name, dob, stats);
+        Person person = new Person(email, password, name, dob, stats, grade);
         personDetailsService.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
