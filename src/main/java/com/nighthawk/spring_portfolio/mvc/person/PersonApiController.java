@@ -53,7 +53,7 @@ public class PersonApiController {
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
                                              @RequestParam("dob") String dobString,
-                                             @RequestParam("stats") String stats
+                                             @RequestParam("grade") Integer grade
                                              ) {
         Date dob;
         try {
@@ -61,7 +61,7 @@ public class PersonApiController {
         } catch (Exception e) {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
-        Person person = new Person(email, password, name, dob, stats);
+        Person person = new Person(email, password, name, dob, grade);
         personDetailsService.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
@@ -104,23 +104,23 @@ public class PersonApiController {
     @GetMapping("/compareClassesWithPopulation/{personId}")
     public ResponseEntity<List<String>> compareClassesWithPopulation(@PathVariable Long personId) {
         Optional<Person> optionalPerson = repository.findById(personId);
-
+    
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             List<Person> allPersons = repository.findAll();
             List<String> responseMessages = new ArrayList<>();
-
+    
             for (Person otherPerson : allPersons) {
                 if (!otherPerson.getId().equals(personId)) {
                     List<String> similarClasses = findSimilarClasses(person, otherPerson);
                     if (!similarClasses.isEmpty()) {
-                        String message = String.format("User %d has similar classes as User %d such as %s",
-                                                       personId, otherPerson.getId(), similarClasses.toString());
+                        String message = String.format("You have classes with %s. Here are the classes you have together: %s",
+                                                       otherPerson.getName(), similarClasses.toString());
                         responseMessages.add(message);
                     }
                 }
             }
-
+    
             if (responseMessages.isEmpty()) {
                 return ResponseEntity.ok(Collections.singletonList("No similar classes found with any other user."));
             } else {
