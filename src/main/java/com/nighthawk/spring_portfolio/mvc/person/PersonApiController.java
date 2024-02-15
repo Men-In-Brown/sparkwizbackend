@@ -104,23 +104,23 @@ public class PersonApiController {
     @GetMapping("/compareClassesWithPopulation/{personId}")
     public ResponseEntity<List<String>> compareClassesWithPopulation(@PathVariable Long personId) {
         Optional<Person> optionalPerson = repository.findById(personId);
-
+    
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             List<Person> allPersons = repository.findAll();
             List<String> responseMessages = new ArrayList<>();
-
+    
             for (Person otherPerson : allPersons) {
                 if (!otherPerson.getId().equals(personId)) {
                     List<String> similarClasses = findSimilarClasses(person, otherPerson);
                     if (!similarClasses.isEmpty()) {
-                        String message = String.format("User %d has similar classes as User %d such as %s",
-                                                       personId, otherPerson.getId(), similarClasses.toString());
+                        String message = String.format("You have classes with %s. Here are the classes you have together: %s",
+                                                       otherPerson.getName(), similarClasses.toString());
                         responseMessages.add(message);
                     }
                 }
             }
-
+    
             if (responseMessages.isEmpty()) {
                 return ResponseEntity.ok(Collections.singletonList("No similar classes found with any other user."));
             } else {
