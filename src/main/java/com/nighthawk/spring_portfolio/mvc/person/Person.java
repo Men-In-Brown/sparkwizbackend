@@ -104,12 +104,11 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob, String stats, Integer grade) {
+    public Person(String email, String password, String name, Date dob, Integer grade) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
-        this.stats = new HashMap<>();
         this.grade = grade;
        
     }
