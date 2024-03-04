@@ -126,9 +126,9 @@ public class Person {
 
         // basics of class construction
         Person p1 = new Person();
-        p1.setName("Thomas Edison");
-        p1.setEmail("toby@gmail.com");
-        p1.setPassword("123Toby!");
+        p1.setName("Spark User");
+        p1.setEmail("spark@gmail.com");
+        p1.setPassword("123spark");
         p1.setGrade(11);
 
         // adding Note to notes collection
@@ -153,7 +153,7 @@ public class Person {
         Person p5 = new Person();
         p5.setName("Spark Admin");
         p5.setEmail("spk@gmail.com");
-        p5.setPassword("spark");
+        p5.setPassword("sparkadmin");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-11-2001");
             p5.setDob(d);
@@ -175,8 +175,8 @@ public class Person {
 
         Person p6 = new Person();
         p6.setName("John Mortensen");
-        p6.setEmail("jm1021@gmail.com");
-        p6.setPassword("123Qwerty!");
+        p6.setEmail("mort@gmail.com");
+        p6.setPassword("123mort");
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("09-14-2001");
             p6.setDob(d);
